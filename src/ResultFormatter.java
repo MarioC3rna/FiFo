@@ -1,0 +1,240 @@
+import java.util.List;
+import models.Process;
+import scheduler.FIFO;
+
+/**
+ * Clase responsable de formatear y mostrar los resultados del algoritmo FIFO
+ */
+public class ResultFormatter {
+    
+    /**
+     * Muestra todos los resultados del simulador FIFO de forma completa
+     * @param fifo Planificador FIFO con resultados calculados
+     */
+    public void displayCompleteResults(FIFO fifo) {
+        if (!fifo.hasValidResults()) {
+            System.out.println("❌ Error: No hay resultados válidos para mostrar");
+            return;
+        }
+        
+        List<Process> processes = fifo.getProcessedProcesses();
+        
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("           RESULTADOS DEL ALGORITMO FIFO");
+        System.out.println("=".repeat(60));
+        
+        // 1. Orden de ejecución del CPU
+        displayExecutionOrder(fifo.getExecutionOrder());
+        
+        // 2. Tabla detallada de tiempos por proceso
+        displayDetailedProcessTable(processes);
+        
+        // 3. Métricas individuales
+        displayIndividualMetrics(processes);
+        
+        // 4. Métricas promedio
+        displayAverageMetrics(fifo.getAverageWaitingTime(), fifo.getAverageTurnaroundTime());
+        
+        // 5. Cronograma de ejecución
+        displayExecutionTimeline(processes);
+        
+        System.out.println("=".repeat(60));
+    }
+    
+    /**
+     * Muestra el orden en que los procesos hacen uso del CPU
+     * @param executionOrder Lista de procesos en orden de ejecución
+     */
+    public void displayExecutionOrder(List<Process> executionOrder) {
+        System.out.println("\n🔄 ORDEN DE EJECUCIÓN DEL CPU:");
+        System.out.println("-".repeat(30));
+        
+        StringBuilder orderBuilder = new StringBuilder();
+        for (int i = 0; i < executionOrder.size(); i++) {
+            Process p = executionOrder.get(i);
+            orderBuilder.append("P").append(p.getPid());
+            if (i < executionOrder.size() - 1) {
+                orderBuilder.append(" → ");
+            }
+        }
+        
+        System.out.println("Orden: " + orderBuilder.toString());
+        System.out.println("(Los procesos se ejecutan según su tiempo de llegada)");
+    }
+    
+    /**
+     * Muestra una tabla detallada con todos los tiempos calculados
+     * @param processes Lista de procesos con tiempos calculados
+     */
+    public void displayDetailedProcessTable(List<Process> processes) {
+        System.out.println("\n📊 TABLA DETALLADA DE TIEMPOS:");
+        System.out.println("-".repeat(80));
+        
+        // Encabezado de la tabla
+        System.out.printf("%-8s %-8s %-8s %-8s %-8s %-8s %-8s\n", 
+                "Proceso", "Llegada", "Ráfaga", "Inicio", "Fin", "Espera", "Retorno");
+        System.out.println("-".repeat(80));
+        
+        // Filas de datos
+        for (Process process : processes) {
+            System.out.printf("%-8s %-8d %-8d %-8d %-8d %-8d %-8d\n",
+                    "P" + process.getPid(),
+                    process.getArrivalTime(),
+                    process.getBurstTime(),
+                    process.getStartTime(),
+                    process.getCompletionTime(),
+                    process.getWaitingTime(),
+                    process.getTurnaroundTime());
+        }
+        System.out.println("-".repeat(80));
+    }
+    
+    /**
+     * Muestra las métricas individuales para cada proceso
+     * @param processes Lista de procesos con métricas calculadas
+     */
+    public void displayIndividualMetrics(List<Process> processes) {
+        System.out.println("\n⏱️  MÉTRICAS INDIVIDUALES:");
+        System.out.println("-".repeat(50));
+        
+        System.out.println("📈 Tiempo de Espera por proceso:");
+        for (Process process : processes) {
+            System.out.printf("   P%d: %d unidades de tiempo\n", 
+                    process.getPid(), process.getWaitingTime());
+        }
+        
+        System.out.println("\n📈 Tiempo de Retorno por proceso:");
+        for (Process process : processes) {
+            System.out.printf("   P%d: %d unidades de tiempo\n", 
+                    process.getPid(), process.getTurnaroundTime());
+        }
+    }
+    
+    /**
+     * Muestra las métricas promedio del sistema
+     * @param avgWaitingTime Tiempo medio de espera
+     * @param avgTurnaroundTime Tiempo medio de retorno
+     */
+    public void displayAverageMetrics(double avgWaitingTime, double avgTurnaroundTime) {
+        System.out.println("\n🎯 MÉTRICAS PROMEDIO DEL SISTEMA:");
+        System.out.println("-".repeat(40));
+        System.out.printf("⏳ Tiempo Medio de Espera:  %.2f unidades\n", avgWaitingTime);
+        System.out.printf("🔄 Tiempo Medio de Retorno: %.2f unidades\n", avgTurnaroundTime);
+        
+        // Interpretación de resultados
+        System.out.println("\n💡 Interpretación:");
+        if (avgWaitingTime <= 5) {
+            System.out.println("   ✅ Excelente tiempo de espera (≤ 5)");
+        } else if (avgWaitingTime <= 10) {
+            System.out.println("   ⚠️  Tiempo de espera moderado (6-10)");
+        } else {
+            System.out.println("   ❌ Tiempo de espera alto (> 10)");
+        }
+        
+        if (avgTurnaroundTime <= 15) {
+            System.out.println("   ✅ Excelente tiempo de retorno (≤ 15)");
+        } else if (avgTurnaroundTime <= 25) {
+            System.out.println("   ⚠️  Tiempo de retorno moderado (16-25)");
+        } else {
+            System.out.println("   ❌ Tiempo de retorno alto (> 25)");
+        }
+    }
+    
+    /**
+     * Muestra un cronograma visual de la ejecución
+     * @param processes Lista de procesos ordenados por ejecución
+     */
+    public void displayExecutionTimeline(List<Process> processes) {
+        System.out.println("\n📅 CRONOGRAMA DE EJECUCIÓN:");
+        System.out.println("-".repeat(50));
+        
+        // Encontrar el tiempo total
+        int maxTime = 0;
+        for (Process p : processes) {
+            maxTime = Math.max(maxTime, p.getCompletionTime());
+        }
+        
+        // Mostrar línea de tiempo
+        System.out.print("Tiempo:  ");
+        for (int t = 0; t <= maxTime; t++) {
+            System.out.printf("%2d ", t);
+        }
+        System.out.println();
+        
+        System.out.print("CPU:     ");
+        int currentTime = 0;
+        for (Process process : processes) {
+            // Tiempo inactivo antes del proceso
+            while (currentTime < process.getStartTime()) {
+                System.out.print(" - ");
+                currentTime++;
+            }
+            
+            // Ejecución del proceso
+            for (int t = process.getStartTime(); t < process.getCompletionTime(); t++) {
+                System.out.printf("P%d ", process.getPid());
+                currentTime++;
+            }
+        }
+        System.out.println();
+        
+        // Leyenda
+        System.out.println("\nLeyenda: Pn = Proceso n ejecutándose, - = CPU inactivo");
+    }
+    
+    /**
+     * Muestra un resumen compacto de los resultados
+     * @param fifo Planificador FIFO con resultados
+     */
+    public void displaySummary(FIFO fifo) {
+        System.out.println("\n📋 RESUMEN EJECUTIVO:");
+        System.out.println("-".repeat(30));
+        
+        List<Process> processes = fifo.getProcessedProcesses();
+        System.out.printf("• Procesos ejecutados: %d\n", processes.size());
+        System.out.printf("• Tiempo total de ejecución: %d unidades\n", 
+                getTotalExecutionTime(processes));
+        System.out.printf("• Tiempo medio de espera: %.1f unidades\n", 
+                fifo.getAverageWaitingTime());
+        System.out.printf("• Tiempo medio de retorno: %.1f unidades\n", 
+                fifo.getAverageTurnaroundTime());
+        
+        // Eficiencia del CPU
+        double efficiency = calculateCpuEfficiency(processes);
+        System.out.printf("• Eficiencia del CPU: %.1f%%\n", efficiency);
+    }
+    
+    /**
+     * Calcula el tiempo total de ejecución
+     * @param processes Lista de procesos
+     * @return Tiempo total de ejecución
+     */
+    private int getTotalExecutionTime(List<Process> processes) {
+        if (processes.isEmpty()) return 0;
+        
+        int maxCompletionTime = 0;
+        for (Process p : processes) {
+            maxCompletionTime = Math.max(maxCompletionTime, p.getCompletionTime());
+        }
+        return maxCompletionTime;
+    }
+    
+    /**
+     * Calcula la eficiencia del CPU
+     * @param processes Lista de procesos
+     * @return Porcentaje de eficiencia del CPU
+     */
+    private double calculateCpuEfficiency(List<Process> processes) {
+        if (processes.isEmpty()) return 0.0;
+        
+        int totalBurstTime = 0;
+        for (Process p : processes) {
+            totalBurstTime += p.getBurstTime();
+        }
+        
+        int totalExecutionTime = getTotalExecutionTime(processes);
+        if (totalExecutionTime == 0) return 0.0;
+        
+        return (double) totalBurstTime / totalExecutionTime * 100.0;
+    }
+}
