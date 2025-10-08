@@ -1,18 +1,14 @@
-## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Comandos para poder ejecutar el programa en la cmd con java 21
 
-## Folder Structure
+Compilar en Java 21
 
-The workspace contains two folders by default, where:
+"C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin\javac" -d bin -cp src src\*.java src\models\*.java src\scheduler\*.java src\cli\*.java
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+Ejecutar el programa con java 21
+"C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin\java" -cp bin App
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+Comando todo-en-uno (compilar y ejecutar):
 
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+cd "C:\Users\mario\Desktop\FiFo" && "C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin\javac" -d bin -cp src src\*.java src\models\*.java src\scheduler\*.java src\cli\*.java && "C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin\java" -cp bin App
