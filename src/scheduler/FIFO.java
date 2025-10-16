@@ -60,6 +60,7 @@ public class FIFO {
     
     /**
      * Ordena los procesos por tiempo de llegada (base del algoritmo FIFO)
+     * Si dos procesos llegan al mismo tiempo, se prioriza el de menor ráfaga
      */
     private void sortProcessesByArrivalTime() {
         Collections.sort(this.processes, new Comparator<Process>() {
@@ -70,7 +71,12 @@ public class FIFO {
                 if (arrivalComparison != 0) {
                     return arrivalComparison;
                 }
-                // Si llegan al mismo tiempo, ordenar por PID
+                // Si llegan al mismo tiempo, ordenar por ráfaga (menor ráfaga primero)
+                int burstComparison = Integer.compare(p1.getBurstTime(), p2.getBurstTime());
+                if (burstComparison != 0) {
+                    return burstComparison;
+                }
+                // Si tanto tiempo de llegada como ráfaga son iguales, ordenar por PID
                 return Integer.compare(p1.getPid(), p2.getPid());
             }
         });

@@ -20,8 +20,8 @@ public class ProcessCalculator extends ProcessAccessors {
     }
     
     public void calculateTurnaroundTime() {
-        // Tiempo de retorno = Tiempo de finalización - Tiempo de llegada
-        this.turnaroundTime = this.completionTime - this.arrivalTime;
+        // Tiempo de retorno = Tiempo de finalización (sin restar tiempo de llegada)
+        this.turnaroundTime = this.completionTime;
     }
     
     // Método para calcular automáticamente todos los tiempos

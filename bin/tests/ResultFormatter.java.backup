@@ -1,4 +1,6 @@
+package tests;
 import java.util.List;
+import java.util.Scanner;
 import models.Process;
 import scheduler.FIFO;
 
@@ -6,6 +8,19 @@ import scheduler.FIFO;
  * Clase responsable de formatear y mostrar los resultados del algoritmo FIFO
  */
 public class ResultFormatter {
+    private Scanner scanner;
+    
+    public ResultFormatter() {
+        this.scanner = new Scanner(System.in);
+    }
+    
+    /**
+     * Pausa la ejecución hasta que el usuario presione Enter
+     */
+    private void waitForUser() {
+        System.out.print("\n📄 Presione Enter para continuar a la siguiente sección...");
+        scanner.nextLine();
+    }
     
     /**
      * Muestra todos los resultados del simulador FIFO de forma completa
@@ -25,15 +40,19 @@ public class ResultFormatter {
         
         // 1. Orden de ejecución del CPU
         displayExecutionOrder(fifo.getExecutionOrder());
+        waitForUser();
         
         // 2. Tabla detallada de tiempos por proceso
         displayDetailedProcessTable(processes);
+        waitForUser();
         
         // 3. Métricas individuales
         displayIndividualMetrics(processes);
+        waitForUser();
         
         // 4. Métricas promedio
         displayAverageMetrics(fifo.getAverageWaitingTime(), fifo.getAverageTurnaroundTime());
+        waitForUser();
         
         // 5. Cronograma de ejecución
         displayExecutionTimeline(processes);
@@ -68,25 +87,21 @@ public class ResultFormatter {
      */
     public void displayDetailedProcessTable(List<Process> processes) {
         System.out.println("\n📊 TABLA DETALLADA DE TIEMPOS:");
-        System.out.println("-".repeat(80));
+        System.out.println("-".repeat(40));
         
         // Encabezado de la tabla
-        System.out.printf("%-8s %-8s %-8s %-8s %-8s %-8s %-8s\n", 
-                "Proceso", "Llegada", "Ráfaga", "Inicio", "Fin", "Espera", "Retorno");
-        System.out.println("-".repeat(80));
+        System.out.printf("%-10s %-10s %-10s\n", 
+                "Proceso", "Llegada", "Ráfaga");
+        System.out.println("-".repeat(40));
         
         // Filas de datos
         for (Process process : processes) {
-            System.out.printf("%-8s %-8d %-8d %-8d %-8d %-8d %-8d\n",
+            System.out.printf("%-10s %-10d %-10d\n",
                     "P" + process.getPid(),
                     process.getArrivalTime(),
-                    process.getBurstTime(),
-                    process.getStartTime(),
-                    process.getCompletionTime(),
-                    process.getWaitingTime(),
-                    process.getTurnaroundTime());
+                    process.getBurstTime());
         }
-        System.out.println("-".repeat(80));
+        System.out.println("-".repeat(40));
     }
     
     /**
@@ -236,5 +251,14 @@ public class ResultFormatter {
         if (totalExecutionTime == 0) return 0.0;
         
         return (double) totalBurstTime / totalExecutionTime * 100.0;
+    }
+    
+    /**
+     * Cierra el scanner
+     */
+    public void close() {
+        if (scanner != null) {
+            scanner.close();
+        }
     }
 }
