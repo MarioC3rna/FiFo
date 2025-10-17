@@ -1,43 +1,50 @@
 @echo off
 setlocal
 
-echo ========================================
-echo    SIMULADOR DE PLANIFICACION FIFO
-echo ========================================
+title Simulador FIFO
+
+cls
 echo.
-echo CORRECCION: Cuando dos procesos llegan
-echo al mismo tiempo, se prioriza el de
-echo menor rafaga de CPU.
-echo ========================================
+echo ================================================
+echo        SIMULADOR DE PLANIFICACION FIFO
+echo ================================================
 echo.
 
 REM Configurar Java 21
 set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot
 set PATH=%JAVA_HOME%\bin;%PATH%
 
-echo Compilando el proyecto...
-cd /d "%~dp0src"
-
-REM Limpiar archivos compilados anteriores
-del /Q *.class 2>nul
-del /Q models\*.class 2>nul
-del /Q scheduler\*.class 2>nul
-del /Q cli\*.class 2>nul
-del /Q tests\*.class 2>nul
-
-echo Compilando con Java 21...
-javac -cp . cli\CLI.java models\Process.java models\ProcessAccessors.java models\ProcessCalculator.java models\ProcessData.java scheduler\FIFO.java tests\App.java tests\ResultFormatter.java
-
-if %ERRORLEVEL% NEQ 0 (
-    echo Error en la compilacion
+echo [1/3] Verificando Java...
+java -version 2>nul
+if errorlevel 1 (
+    echo ERROR: Java 21 no encontrado
     pause
     exit /b 1
 )
-
-echo Compilacion exitosa!
+echo OK - Java encontrado
 echo.
-echo Ejecutando el simulador...
-echo ========================================
-java -cp . tests.App
 
+echo [2/3] Limpiando compilaciones anteriores...
+if exist bin rmdir /s /q bin
+mkdir bin
+echo OK - Limpieza completa
+echo.
+
+echo [3/3] Compilando proyecto...
+javac -encoding UTF-8 -d bin src\cli\*.java src\models\*.java src\scheduler\*.java src\tests\*.java
+if errorlevel 1 (
+    echo.
+    echo ERROR en la compilacion
+    pause
+    exit /b 1
+)
+echo OK - Compilacion exitosa
+echo.
+
+echo ================================================
+echo.
+java -cp bin -Dfile.encoding=UTF-8 tests.App
+
+echo.
+echo ================================================
 pause

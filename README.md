@@ -1,48 +1,37 @@
 # Simulador de Planificación FIFO
 
-## ✅ Corrección Implementada
+Simulador del algoritmo de planificación FIFO (First In, First Out) para Sistemas Operativos.
 
-**PROBLEMA SOLUCIONADO**: El algoritmo ahora ordena correctamente los procesos cuando tienen el mismo tiempo de llegada, priorizando el que tiene la ráfaga más pequeña.
+## 🚀 Ejecución Rápida
 
-### Lógica de Ordenamiento:
-1. **Primero**: Se ordena por tiempo de llegada (menor primero)
-2. **Si dos procesos llegan al mismo tiempo**: Se ordena por ráfaga de CPU (menor primero)
-3. **Si ambos tienen la misma ráfaga**: Se ordena por PID
-
-## 🚀 Cómo Ejecutar el Proyecto
-
-### Opción 1: Script Automático (Recomendado)
 ```cmd
-# Desde el directorio raíz del proyecto
-.\run.bat
+EJECUTAR.bat
 ```
 
-### Opción 2: Comandos Manuales con Java 21
+## 📋 Características
 
-**Compilar:**
-```cmd
-cd src
-"C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin\javac" -cp . cli\CLI.java models\*.java scheduler\FIFO.java tests\*.java
-```
+✅ **Ordenamiento correcto**: Los procesos con el mismo tiempo de llegada se ordenan por ráfaga menor  
+✅ **Interfaz limpia**: Resultados con formato profesional  
+✅ **Cálculos automáticos**: Tiempos de espera, retorno y métricas finales  
+✅ **Línea de tiempo visual**: Representación gráfica de la ejecución  
 
-**Ejecutar:**
-```cmd
-"C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin\java" -cp . tests.App
-```
+## 📊 Formato de Salida
 
-## 📋 Ejemplo de Prueba
+### 1. Tabla de Procesos
+Muestra los procesos con su ráfaga de CPU y tiempo de llegada.
 
-Para verificar que el ordenamiento funciona correctamente, prueba con estos procesos que **todos llegan al mismo tiempo (3)**:
+### 2. Línea de Tiempo
+Representación visual de cuándo se ejecuta cada proceso.
 
-```
-Proceso 1: Llegada=3, Ráfaga=5
-Proceso 2: Llegada=3, Ráfaga=2
-Proceso 3: Llegada=3, Ráfaga=1
-Proceso 4: Llegada=3, Ráfaga=10
-```
+### 3. Tiempos de Espera
+Cálculo: `Tiempo de Inicio - Tiempo de Llegada`
 
-**Orden de ejecución esperado**: P3 → P2 → P1 → P4  
-(ordenados por ráfaga: 1, 2, 5, 10)
+### 4. Tiempos de Retorno
+Cálculo: `Tiempo de Finalización` (sin restar tiempo de llegada)
+
+### 5. Métricas Finales
+- **TME**: Tiempo Medio de Espera
+- **TMR**: Tiempo Medio de Retorno
 
 ## 📁 Estructura del Proyecto
 
@@ -50,29 +39,50 @@ Proceso 4: Llegada=3, Ráfaga=10
 FiFo/
 ├── src/
 │   ├── cli/
-│   │   └── CLI.java                # Interfaz de usuario
+│   │   └── CLI.java              # Interfaz de usuario
 │   ├── models/
-│   │   ├── Process.java            # Modelo de proceso
-│   │   ├── ProcessAccessors.java
-│   │   ├── ProcessCalculator.java
-│   │   └── ProcessData.java
+│   │   ├── Process.java          # Clase principal de proceso
+│   │   ├── ProcessData.java      # Datos del proceso
+│   │   ├── ProcessAccessors.java # Getters y setters
+│   │   └── ProcessCalculator.java # Cálculos de tiempos
 │   ├── scheduler/
-│   │   └── FIFO.java               # ⭐ Algoritmo FIFO (CORREGIDO)
+│   │   └── FIFO.java             # Algoritmo FIFO
 │   └── tests/
-│       ├── App.java                # Aplicación principal
-│       ├── AppFixed.java
-│       └── ResultFormatter.java    # Formateo de resultados
-├── run.bat                         # Script de ejecución
-└── README.md                       # Este archivo
+│       ├── App.java              # Aplicación principal
+│       └── ResultFormatter.java  # Formato de resultados
+├── EJECUTAR.bat                  # Script de ejecución
+└── README.md                     # Este archivo
 ```
 
 ## 🔧 Requisitos
 
-- **Java 21** (Eclipse Adoptium OpenJDK)
+- Java 21 (OpenJDK Eclipse Adoptium)
 - Windows (PowerShell o CMD)
 
-## ⚠️ Notas Importantes
+## 📝 Ejemplo de Uso
 
-- Asegúrate de usar Java 21 (el proyecto fue compilado con esta versión)
-- Si encuentras errores de "clase no encontrada", verifica que estés en el directorio `src` al ejecutar
-- El script `run.bat` maneja automáticamente la compilación y ejecución
+1. Ejecuta `EJECUTAR.bat`
+2. Ingresa el número de procesos (1-20)
+3. Para cada proceso ingresa:
+   - Tiempo de llegada (≥ 0)
+   - Ráfaga de CPU (> 0)
+4. Confirma la simulación
+5. Visualiza los resultados
+
+## 🎯 Algoritmo FIFO
+
+**Criterio de ordenamiento:**
+1. Tiempo de llegada (menor primero)
+2. Si empatan: Ráfaga de CPU (menor primero)
+3. Si empatan: PID (menor primero)
+
+## 💡 Notas
+
+- Los procesos se identifican como P1, P2, P3, etc. según el orden de entrada
+- El simulador calcula automáticamente todos los tiempos
+- Los resultados se muestran con formato académico
+
+---
+
+**Versión**: 3.0 (Simplificada y Optimizada)  
+**Fecha**: 16 de octubre de 2025
