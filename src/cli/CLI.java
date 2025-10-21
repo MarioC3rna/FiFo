@@ -52,12 +52,12 @@ public class CLI {
                 numProcesses = Integer.parseInt(scanner.nextLine().trim());
                 
                 if (numProcesses < 1 || numProcesses > 20) {
-                    System.out.println("❌ Error: El número debe estar entre 1 y 20");
+                    System.out.println("Error: El numero debe estar entre 1 y 20");
                 } else {
                     validInput = true;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Error: Ingrese un número válido");
+                System.out.println("Error: Ingrese un numero valido");
             }
         }
         
@@ -86,17 +86,17 @@ public class CLI {
         boolean validInput = false;
         
         while (!validInput) {
-            System.out.printf("Tiempo de llegada para P%d (≥ 0): ", processId);
+            System.out.printf("Tiempo de llegada para P%d (>= 0): ", processId);
             try {
                 arrivalTime = Integer.parseInt(scanner.nextLine().trim());
                 
                 if (arrivalTime < 0) {
-                    System.out.println("❌ Error: El tiempo de llegada no puede ser negativo");
+                    System.out.println("Error: El tiempo de llegada no puede ser negativo");
                 } else {
                     validInput = true;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Error: Ingrese un número válido");
+                System.out.println("Error: Ingrese un numero valido");
             }
         }
         
@@ -113,17 +113,17 @@ public class CLI {
         boolean validInput = false;
         
         while (!validInput) {
-            System.out.printf("Ráfaga de CPU para P%d (> 0): ", processId);
+            System.out.printf("Rafaga de CPU para P%d (> 0): ", processId);
             try {
                 burstTime = Integer.parseInt(scanner.nextLine().trim());
                 
                 if (burstTime <= 0) {
-                    System.out.println("❌ Error: La ráfaga de CPU debe ser mayor a 0");
+                    System.out.println("Error: La rafaga de CPU debe ser mayor a 0");
                 } else {
                     validInput = true;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Error: Ingrese un número válido");
+                System.out.println("Error: Ingrese un numero valido");
             }
         }
         
@@ -137,7 +137,7 @@ public class CLI {
     public void showProcessSummary(List<Process> processes) {
         System.out.println("\n=== RESUMEN DE PROCESOS INGRESADOS ===");
         System.out.println("--------------------------------------");
-        System.out.printf("%-8s %-15s %-10s\n", "Proceso", "Tiempo Llegada", "Ráfaga CPU");
+        System.out.printf("%-8s %-15s %-10s\n", "Proceso", "Tiempo Llegada", "Rafaga CPU");
         System.out.println("--------------------------------------");
         
         for (Process process : processes) {

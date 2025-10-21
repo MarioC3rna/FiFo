@@ -11,7 +11,7 @@ import scheduler.FIFO;
  */
 public class App {
     public static void main(String[] args) {
-        System.out.println("🚀 Iniciando Simulador de Planificación FIFO...\n");
+        System.out.println("Iniciando Simulador de Planificacion FIFO...\n");
         
         CLI cli = new CLI();
         ResultFormatter formatter = new ResultFormatter();
@@ -28,29 +28,29 @@ public class App {
                 cli.showProcessSummary(inputProcesses);
                 
                 // Confirmar antes de procesar
-                if (!cli.confirmAction("\n¿Desea proceder con la simulación FIFO?")) {
-                    System.out.println("❌ Simulación cancelada por el usuario.");
+                if (!cli.confirmAction("\nDesea proceder con la simulacion FIFO?")) {
+                    System.out.println("Simulacion cancelada por el usuario.");
                     break;
                 }
                 
                 // Paso 2: Ejecutar algoritmo FIFO
-                System.out.println("\n⚙️  Procesando...\n");
+                System.out.println("\nProcesando...\n");
                 scheduler.schedule(inputProcesses);
                 
                 // Paso 3: Mostrar resultados
                 formatter.displayResults(scheduler);
                 
-                System.out.println("✅ Simulación completada exitosamente.");
+                System.out.println("Simulacion completada exitosamente.");
                 
                 // Preguntar si desea realizar otra simulación
                 System.out.println();
-                continueSimulation = cli.confirmAction("¿Desea realizar otra simulación?");
+                continueSimulation = cli.confirmAction("Desea realizar otra simulacion?");
                 
                 if (!continueSimulation) {
                     // Confirmar salida
-                    if (!cli.confirmAction("¿Está seguro que desea salir del simulador?")) {
+                    if (!cli.confirmAction("Esta seguro que desea salir del simulador?")) {
                         continueSimulation = true; // Continúa si no confirma la salida
-                        System.out.println("\n🔄 Continuando con el simulador...\n");
+                        System.out.println("\nContinuando con el simulador...\n");
                     }
                 }
                 
@@ -62,15 +62,15 @@ public class App {
             }
             
         } catch (IllegalArgumentException e) {
-            System.err.println("❌ Error en los datos de entrada: " + e.getMessage());
+            System.err.println("Error en los datos de entrada: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("❌ Error inesperado: " + e.getMessage());
+            System.err.println("Error inesperado: " + e.getMessage());
             e.printStackTrace();
         } finally {
             // Limpiar recursos
             cli.close();
             formatter.close();
-            System.out.println("\n👋 ¡Gracias por usar el simulador FIFO!");
+            System.out.println("\nGracias por usar el simulador FIFO!");
         }
     }
 }
